@@ -8,14 +8,15 @@ export default {
     posts: async () => postController.allPosts(),
     post: async (parent, args, context) => postController.findPostById(args),
   },
-
   Mutation: {
     createPost: async (parent, args, context) => {
-      pubsub.publish('POST_CREATED', { postCreated: args.post });
-      return postController.createPost(args);
+      const newPost = await postController.createPost(args);
+      await pubsub.publish('POST_CREATED', {
+        post: { ...newPost },
+      });
+      return newPost;
     },
   },
-
   Subscription: {
     OnPostCreated: {
       subscribe: () => pubsub.asyncIterator(['POST_CREATED']),

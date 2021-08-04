@@ -22,6 +22,6 @@ type Mutation {
 }
 
 type Subscription {
-  OnPostCreated:Post
+  OnPostCreated: Post
 }
 `;
