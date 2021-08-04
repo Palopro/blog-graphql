@@ -11,8 +11,7 @@ type AuthUser {
 }
 type Query {
     users: [User]
-    userById(_id: ID): User
-    getUserByEmail(email: String): User
+    user(_id: ID): User
 }
 type Mutation {
     registerUser(user: RegisterUserInput): User!

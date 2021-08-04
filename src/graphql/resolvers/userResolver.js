@@ -2,13 +2,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server';
 import User from '../../models/User.model';
+import { userController } from '../../controllers/userController';
 
 export default {
   Query: {
-    users: async () => {
-      const users = await User.find();
-      return users;
-    },
+    users: async () => userController.findAllUsers(),
+    user: async (parent, args) => userController.findUserById(args),
   },
 
   Mutation: {

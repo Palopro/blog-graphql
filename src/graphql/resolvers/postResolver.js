@@ -1,24 +1,24 @@
-import Post from '../../models/Post.model';
+import { PubSub } from 'graphql-subscriptions';
+import { postController } from '../../controllers/postController';
+
+const pubsub = new PubSub();
 
 export default {
   Query: {
-    posts: async () => {
-      const posts = await Post.find();
-      return posts;
-    },
-    post: async (parent, { _id }, context, info) => {
-      const post = await Post.findById(_id);
-      return post;
-    },
+    posts: async () => postController.allPosts(),
+    post: async (parent, args, context) => postController.findPostById(args),
   },
 
   Mutation: {
-    createPost: async (parent, { post }, context, info) => {
-      const newPost = await Post.create({
-        title: post.title,
-        post: post.post,
-      });
-      return newPost;
+    createPost: async (parent, args, context) => {
+      pubsub.publish('POST_CREATED', { postCreated: args.post });
+      return postController.createPost(args);
+    },
+  },
+
+  Subscription: {
+    OnPostCreated: {
+      subscribe: () => pubsub.asyncIterator(['POST_CREATED']),
     },
   },
 };

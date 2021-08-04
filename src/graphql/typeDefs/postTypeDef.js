@@ -3,11 +3,13 @@ type Post {
     _id: ID
     title: String
     post: String
+    authorId: String
 }
 
 input NewPostInput {
     title: String
     post: String
+    authorId: String
 }
 
 type Query {
@@ -19,4 +21,7 @@ type Mutation {
     createPost(post: NewPostInput): Post
 }
 
+type Subscription {
+  OnPostCreated:Post
+}
 `;

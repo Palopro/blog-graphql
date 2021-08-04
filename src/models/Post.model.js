@@ -7,6 +7,9 @@ const PostSchema = Schema({
   post: {
     type: String,
   },
+  authorId: {
+    type: String,
+  },
 }, {
   timestamps: {
     createdAt: true,
